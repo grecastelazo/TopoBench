@@ -329,6 +329,14 @@ class A123CortexMDataset(InMemoryDataset):
     def extract_samples(data_dir: str, n_bins: int, min_neurons: int = 8):
         """Extract subgraph samples from raw .mat files.
 
+        One graph is produced per (session, frequency-bin) by pooling neurons
+        across all five cortical layers.  Within a session the global
+        correlation matrix (``selectZCorrInfo``) is shared by every layer; the
+        per-layer ``BFInfo`` tables only supply the best-frequency bin
+        assignment for each neuron.  Collecting neuron indices from all layers
+        before slicing the correlation matrix therefore gives a single,
+        whole-session graph for each frequency bin.
+
         Parameters
         ----------
         data_dir : str
@@ -343,7 +351,8 @@ class A123CortexMDataset(InMemoryDataset):
         pd.DataFrame
             DataFrame containing extracted samples with columns for
             session_file, session_id, layer, bf_bin, neuron_indices,
-            corr, and noise_corr.
+            corr, and noise_corr.  ``layer`` is set to -1 to indicate that
+            neurons from all layers are pooled.
         """
         mat_files = collect_mat_files(data_dir)
 
@@ -352,33 +361,42 @@ class A123CortexMDataset(InMemoryDataset):
         for f in mat_files:
             print(f"Processing session {session_id}: {os.path.basename(f)}")
             mt = process_mat(scipy.io.loadmat(f))
-            for layer in range(1, 6):
-                scorrs = np.array(mt["selectZCorrInfo"]["SigCorrs"])
-                ncorrs = np.array(mt["selectZCorrInfo"]["NoiseCorrsTrial"])
-                bfvals = np.array(mt["BFInfo"][layer]["BFval"]).ravel()
-                if scorrs.size == 0 or bfvals.size == 0:
+
+            scorrs = np.array(mt["selectZCorrInfo"]["SigCorrs"])
+            ncorrs = np.array(mt["selectZCorrInfo"]["NoiseCorrsTrial"])
+            if scorrs.size == 0:
+                session_id += 1
+                continue
+
+            for bin_idx in range(n_bins):
+                # Collect neuron indices from every layer that are tuned to
+                # this frequency bin, then deduplicate.
+                all_sel = set()
+                for layer in range(1, 6):
+                    bfvals = np.array(mt["BFInfo"][layer]["BFval"]).ravel()
+                    if bfvals.size == 0:
+                        continue
+                    bin_ids = bfvals.astype(int)
+                    sel = np.where(bin_ids == bin_idx)[0]
+                    all_sel.update(sel.tolist())
+
+                combined_sel = np.array(sorted(all_sel))
+                if len(combined_sel) < min_neurons:
                     continue
 
-                bin_ids = bfvals.astype(int)
-
-                for bin_idx in range(n_bins):
-                    sel = np.where(bin_ids == bin_idx)[0]
-                    if len(sel) < min_neurons:
-                        continue
-                    subcorr = scorrs[np.ix_(sel, sel)]
-                    samples.append(
-                        {
-                            "session_file": f,
-                            "session_id": session_id,
-                            "layer": layer,
-                            "bf_bin": int(bin_idx),
-                            "neuron_indices": sel.tolist(),
-                            "corr": subcorr.astype(float),
-                            "noise_corr": ncorrs[np.ix_(sel, sel)].astype(
-                                float
-                            ),
-                        }
-                    )
+                subcorr = scorrs[np.ix_(combined_sel, combined_sel)]
+                samples.append(
+                    {
+                        "session_file": f,
+                        "session_id": session_id,
+                        "bf_bin": int(bin_idx),
+                        "neuron_indices": combined_sel.tolist(),
+                        "corr": subcorr.astype(float),
+                        "noise_corr": ncorrs[
+                            np.ix_(combined_sel, combined_sel)
+                        ].astype(float),
+                    }
+                )
             session_id += 1
 
         samples = pd.DataFrame(samples)
@@ -457,7 +475,6 @@ class A123CortexMDataset(InMemoryDataset):
         data = Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=y)
         # attach metadata
         data.session_id = int(sample.get("session_id", -1))
-        data.layer = int(sample.get("layer", -1))
         return data
 
     def _extract_triangles_from_graphs(self) -> list:
