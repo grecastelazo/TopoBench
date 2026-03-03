@@ -19,13 +19,13 @@ echo "======================================================="
 # ------------------------------------------------------------------------------
 TORCH_VER="2.3.0"
 
-if [ "$PLATFORM" == "cpu" ]; then
+if [ "$PLATFORM" = "cpu" ]; then
     TARGET_INDEX="pytorch-cpu"
     PYG_URL="https://data.pyg.org/whl/torch-${TORCH_VER}+cpu.html"
-elif [ "$PLATFORM" == "cu118" ]; then
+elif [ "$PLATFORM" = "cu118" ]; then
     TARGET_INDEX="pytorch-cu118"
     PYG_URL="https://data.pyg.org/whl/torch-${TORCH_VER}+cu118.html"
-elif [ "$PLATFORM" == "cu121" ]; then
+elif [ "$PLATFORM" = "cu121" ]; then
     TARGET_INDEX="pytorch-cu121"
     PYG_URL="https://data.pyg.org/whl/torch-${TORCH_VER}+cu121.html"
 else

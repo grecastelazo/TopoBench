@@ -203,9 +203,9 @@ class A123CortexMDataset(InMemoryDataset):
             self.n_bins = int(getattr(parameters, "n_bins", 9))
 
         try:
-            self.min_neurons = int(parameters.get("min_neurons", 8))
+            self.min_neurons = int(parameters.get("min_neurons", 3))
         except Exception:
-            self.min_neurons = int(getattr(parameters, "min_neurons", 8))
+            self.min_neurons = int(getattr(parameters, "min_neurons", 3))
 
         # Task type from parameters (classification, triangle_classification, or triangle_common_neighbors)
         try:
@@ -262,6 +262,44 @@ class A123CortexMDataset(InMemoryDataset):
             Path to the processed directory.
         """
         return osp.join(self.root, self.name, "processed")
+
+    def get(self, idx: int) -> Data:
+        """Return the idx-th graph with one-hot y of shape (n_bins,).
+
+        Parameters
+        ----------
+        idx : int
+            Index of the graph to retrieve.
+
+        Returns
+        -------
+        Data
+            The graph at the given index with y as a one-hot vector.
+        """
+        data = super().get(idx)
+        # Stored y is (n_bins=9, n_samples); extract column idx as (n_bins,)
+        if (
+            self.slices is not None
+            and "y" in self.slices
+            and self._data.y.dim() == 2
+        ):
+            data.y = self._data.y[:, idx].clone()
+        return data
+
+    @property
+    def y_onehot(self) -> torch.Tensor:
+        """Return labels as one-hot tensor of shape (n_bins, n_samples).
+
+        Returns
+        -------
+        torch.Tensor
+            One-hot encoded labels of shape (n_bins, n_samples).
+        """
+        if self._data.y.dim() == 2:
+            return self._data.y
+        # Old format: (n_samples*9,) -> reshape to (9, n_samples)
+        n = len(self)
+        return self._data.y.view(n, self.n_bins).T
 
     @property
     def raw_file_names(self) -> list[str]:
@@ -326,8 +364,16 @@ class A123CortexMDataset(InMemoryDataset):
         self.data_dir = folder
 
     @staticmethod
-    def extract_samples(data_dir: str, n_bins: int, min_neurons: int = 8):
+    def extract_samples(data_dir: str, n_bins: int, min_neurons: int = 3):
         """Extract subgraph samples from raw .mat files.
+
+        One graph is produced per (session, frequency-bin) by pooling neurons
+        across all five cortical layers.  Within a session the global
+        correlation matrix (``selectZCorrInfo``) is shared by every layer; the
+        per-layer ``BFInfo`` tables only supply the best-frequency bin
+        assignment for each neuron.  Collecting neuron indices from all layers
+        before slicing the correlation matrix therefore gives a single,
+        whole-session graph for each frequency bin.
 
         Parameters
         ----------
@@ -343,7 +389,8 @@ class A123CortexMDataset(InMemoryDataset):
         pd.DataFrame
             DataFrame containing extracted samples with columns for
             session_file, session_id, layer, bf_bin, neuron_indices,
-            corr, and noise_corr.
+            corr, and noise_corr.  ``layer`` is set to -1 to indicate that
+            neurons from all layers are pooled.
         """
         mat_files = collect_mat_files(data_dir)
 
@@ -352,33 +399,42 @@ class A123CortexMDataset(InMemoryDataset):
         for f in mat_files:
             print(f"Processing session {session_id}: {os.path.basename(f)}")
             mt = process_mat(scipy.io.loadmat(f))
-            for layer in range(1, 6):
-                scorrs = np.array(mt["selectZCorrInfo"]["SigCorrs"])
-                ncorrs = np.array(mt["selectZCorrInfo"]["NoiseCorrsTrial"])
-                bfvals = np.array(mt["BFInfo"][layer]["BFval"]).ravel()
-                if scorrs.size == 0 or bfvals.size == 0:
+
+            scorrs = np.array(mt["selectZCorrInfo"]["SigCorrs"])
+            ncorrs = np.array(mt["selectZCorrInfo"]["NoiseCorrsTrial"])
+            if scorrs.size == 0:
+                session_id += 1
+                continue
+
+            for bin_idx in range(n_bins):
+                # Collect neuron indices from every layer that are tuned to
+                # this frequency bin, then deduplicate.
+                all_sel = set()
+                for layer in range(1, 6):
+                    bfvals = np.array(mt["BFInfo"][layer]["BFval"]).ravel()
+                    if bfvals.size == 0:
+                        continue
+                    bin_ids = bfvals.astype(int)
+                    sel = np.where(bin_ids == bin_idx)[0]
+                    all_sel.update(sel.tolist())
+
+                combined_sel = np.array(sorted(all_sel))
+                if len(combined_sel) < min_neurons:
                     continue
 
-                bin_ids = bfvals.astype(int)
-
-                for bin_idx in range(n_bins):
-                    sel = np.where(bin_ids == bin_idx)[0]
-                    if len(sel) < min_neurons:
-                        continue
-                    subcorr = scorrs[np.ix_(sel, sel)]
-                    samples.append(
-                        {
-                            "session_file": f,
-                            "session_id": session_id,
-                            "layer": layer,
-                            "bf_bin": int(bin_idx),
-                            "neuron_indices": sel.tolist(),
-                            "corr": subcorr.astype(float),
-                            "noise_corr": ncorrs[np.ix_(sel, sel)].astype(
-                                float
-                            ),
-                        }
-                    )
+                subcorr = scorrs[np.ix_(combined_sel, combined_sel)]
+                samples.append(
+                    {
+                        "session_file": f,
+                        "session_id": session_id,
+                        "bf_bin": int(bin_idx),
+                        "neuron_indices": combined_sel.tolist(),
+                        "corr": subcorr.astype(float),
+                        "noise_corr": ncorrs[
+                            np.ix_(combined_sel, combined_sel)
+                        ].astype(float),
+                    }
+                )
             session_id += 1
 
         samples = pd.DataFrame(samples)
@@ -404,7 +460,7 @@ class A123CortexMDataset(InMemoryDataset):
         -------
         torch_geometric.data.Data
             Data object with node features [mean_corr, std_corr, noise_diag],
-            edges from thresholded correlation, and label y as integer bf_bin.
+            edges from thresholded correlation, and label y as one-hot (n_bins,).
         """
         corr = np.asarray(sample.get("corr"))
         if corr.ndim != 2 or corr.size == 0:
@@ -453,11 +509,12 @@ class A123CortexMDataset(InMemoryDataset):
                     weights.reshape(-1, 1), dtype=torch.float
                 )
 
-        y = torch.tensor([int(sample.get("bf_bin", -1))], dtype=torch.long)
+        # One-hot label (n_bins,); collated dataset stores y as (n_bins, n_samples)
+        y = torch.zeros(self.n_bins)
+        y[int(sample.get("bf_bin", -1))] = 1
         data = Data(x=x, edge_index=edge_index, edge_attr=edge_attr, y=y)
         # attach metadata
         data.session_id = int(sample.get("session_id", -1))
-        data.layer = int(sample.get("layer", -1))
         return data
 
     def _extract_triangles_from_graphs(self) -> list:
@@ -707,6 +764,12 @@ class A123CortexMDataset(InMemoryDataset):
             f"[A123] Collating {len(data_list)} samples (removed {skipped_count} empty graphs)..."
         )
         self.data, self.slices = self.collate(data_list)
+        # Reshape y from (n_samples*9,) to (n_bins=9, n_samples) and update slices
+        n_samples = len(data_list)
+        self._data.y = self._data.y.view(n_samples, self.n_bins).T.contiguous()
+        self.slices["y"] = torch.arange(
+            n_samples + 1, dtype=torch.long, device=self._data.y.device
+        )
         self._data_list = None
         print(f"[A123] Saving processed data to {self.processed_paths[0]}...")
         fs.torch_save(
