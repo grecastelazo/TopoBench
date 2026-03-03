@@ -174,9 +174,11 @@ class TestA123GraphDataset:
             assert dataset.data.edge_index is not None
             assert dataset.data.y is not None
 
-            # Check labels are in valid range
-            assert torch.all(dataset.data.y >= 0)
-            assert torch.all(dataset.data.y < dataset.num_classes)
+            # Labels stored as one-hot (n_bins=9, n_samples)
+            y = dataset.data.y
+            assert y.dim() == 2 and y.shape[0] == dataset.num_classes
+            assert torch.all((y >= 0) & (y <= 1))
+            assert torch.all(y.sum(dim=0) == 1)  # exactly one class per sample
 
     def test_graph_node_features(self):
         """Test that node features are correctly structured."""
@@ -347,11 +349,12 @@ class TestA123DataIntegrity:
             loader = hydra.utils.instantiate(cfg.dataset.loader)
             dataset = loader.load_dataset()
 
-            # Check labels
+            # Check labels: one-hot (n_bins, n_samples)
             y = dataset.data.y
-            assert y.dtype == torch.long
-            assert torch.all(y >= 0)
-            assert torch.all(y < dataset.num_classes)
+            assert y.dim() == 2 and y.shape[0] == dataset.num_classes
+            assert y.dtype in (torch.float32, torch.float64)
+            assert torch.all((y >= 0) & (y <= 1))
+            assert torch.all(y.sum(dim=0) == 1)
 
 
 class TestTriangleClassifier:
