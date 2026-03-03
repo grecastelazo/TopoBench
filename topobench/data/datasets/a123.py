@@ -203,9 +203,9 @@ class A123CortexMDataset(InMemoryDataset):
             self.n_bins = int(getattr(parameters, "n_bins", 9))
 
         try:
-            self.min_neurons = int(parameters.get("min_neurons", 8))
+            self.min_neurons = int(parameters.get("min_neurons", 3))
         except Exception:
-            self.min_neurons = int(getattr(parameters, "min_neurons", 8))
+            self.min_neurons = int(getattr(parameters, "min_neurons", 3))
 
         # Task type from parameters (classification, triangle_classification, or triangle_common_neighbors)
         try:
@@ -326,7 +326,7 @@ class A123CortexMDataset(InMemoryDataset):
         self.data_dir = folder
 
     @staticmethod
-    def extract_samples(data_dir: str, n_bins: int, min_neurons: int = 8):
+    def extract_samples(data_dir: str, n_bins: int, min_neurons: int = 3):
         """Extract subgraph samples from raw .mat files.
 
         One graph is produced per (session, frequency-bin) by pooling neurons
