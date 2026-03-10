@@ -1,5 +1,5 @@
-name: cwn_cell_a123_bs_lr
-method: random
+name: ast_grid_search
+method: grid
 
 # We log this metric in `topobench/run.py` during the "best checkpoint re-test":
 # `val_best_rerun/accuracy`
@@ -16,10 +16,11 @@ parameters:
   model.backbone.n_layers:
     values: [1, 2, 3]
   optimizer.parameters.lr:
-    # Reasonable range for Adam on this task/model
-    distribution: log_uniform_values
-    min: 0.0001
-    max: 0.01
+    values: [0.0001, 0.001, 0.01]
+  dataset.split_params.data_seed:
+    values: [0, 1, 2]
+  trainer.devices:
+    values: [[4]] # Run on different GPUs to speed up the sweep
 
 # Optional: cap total number of runs for the sweep
 run_cap: 30
@@ -28,6 +29,6 @@ command:
   - ${env}
   - bash
   - scripts/wandb_hydra_entrypoint.sh
-  - model=cell/cwn
+  - model=hypergraph/allsettransformer
   - dataset=graph/a123
   - ${args}
