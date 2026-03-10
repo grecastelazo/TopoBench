@@ -34,7 +34,7 @@ parameters:
   loss_type: cross_entropy
   monitor_metric: accuracy
   task_level: graph
-  min_neurons: 3
+  min_neurons: 8
   corr_threshold: 0.2
   
 
@@ -52,6 +52,6 @@ split_params:
 # Dataloader parameters
 dataloader_params:
   batch_size: 32
-  num_workers: 0
+  num_workers: 19
   pin_memory: False
 

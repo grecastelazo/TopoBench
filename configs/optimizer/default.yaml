@@ -4,7 +4,7 @@ _target_: topobench.optimizer.TBOptimizer
 optimizer_id: Adam # torch id of the optimizer
 # optimizer params
 parameters:
-  lr: 0.001
+  lr: 0.0001
   weight_decay: 0.0
 
 scheduler: # Comment or delete these lines to disable the scheduler

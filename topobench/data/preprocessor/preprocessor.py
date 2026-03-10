@@ -5,6 +5,7 @@ import os
 
 import torch
 import torch_geometric
+from tqdm import tqdm
 from torch_geometric.io import fs
 
 from topobench.data.utils import (
@@ -188,11 +189,18 @@ class PreProcessor(torch_geometric.data.InMemoryDataset):
         elif isinstance(self.dataset, torch_geometric.data.Data):
             data_list = [self.dataset]
 
-        self.data_list = (
-            [self.pre_transform(d) for d in data_list]
-            if self.pre_transform is not None
-            else data_list
-        )
+        if self.pre_transform is not None:
+            # Apply transform to each sample (e.g. graph->simplicial); can be slow
+            self.data_list = [
+                self.pre_transform(d)
+                for d in tqdm(
+                    data_list,
+                    desc="Applying pre_transform",
+                    unit="sample",
+                )
+            ]
+        else:
+            self.data_list = data_list
 
         self._data, self.slices = self.collate(self.data_list)
         self._data_list = None  # Reset cache.

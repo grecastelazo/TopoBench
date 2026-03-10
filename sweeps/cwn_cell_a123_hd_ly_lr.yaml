@@ -1,0 +1,33 @@
+name: cwn_cell_a123_bs_lr
+method: random
+
+# We log this metric in `topobench/run.py` during the "best checkpoint re-test":
+# `val_best_rerun/accuracy`
+metric:
+  name: val_best_rerun/accuracy
+  goal: maximize
+
+parameters:
+  # Pass Hydra overrides via `${args}` (W&B injects `key=value` pairs).
+  # Using `${batch_size}` inside the override string breaks because OmegaConf
+  # treats `${...}` as interpolation.
+  model.feature_encoder.out_channels:
+    values: [8, 16, 32]
+  model.backbone.n_layers:
+    values: [1, 2, 3]
+  optimizer.parameters.lr:
+    # Reasonable range for Adam on this task/model
+    distribution: log_uniform_values
+    min: 0.0001
+    max: 0.01
+
+# Optional: cap total number of runs for the sweep
+run_cap: 30
+
+command:
+  - ${env}
+  - bash
+  - scripts/wandb_hydra_entrypoint.sh
+  - model=cell/cwn
+  - dataset=graph/a123
+  - ${args}

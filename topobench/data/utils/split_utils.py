@@ -3,6 +3,10 @@
 import os
 
 import numpy as np
+
+from topobench.utils import pylogger
+
+log = pylogger.RankedLogger(__name__, rank_zero_only=True)
 import torch
 from sklearn.model_selection import StratifiedKFold
 
@@ -40,17 +44,18 @@ def k_fold_split(labels, parameters, root=None):
     fold = parameters.data_seed
     assert fold < k, "data_seed needs to be less than k"
 
+    n = len(labels)
     torch.manual_seed(0)
     np.random.seed(0)
 
-    split_dir = os.path.join(data_dir, f"{k}-fold")
+    # Include dataset size so different-sized datasets get different splits
+    split_dir = os.path.join(data_dir, f"{k}-fold_n={n}")
 
     if not os.path.isdir(split_dir):
         os.makedirs(split_dir)
 
     split_path = os.path.join(split_dir, f"{fold}.npz")
     if not os.path.isfile(split_path):
-        n = len(labels)
         x_idx = np.arange(n)
         x_idx = np.random.permutation(x_idx)
         labels = labels[x_idx]
@@ -127,9 +132,11 @@ def random_splitting(labels, parameters, root=None, global_data_seed=42):
     train_prop = parameters["train_prop"]
     valid_prop = (1 - train_prop) / 2
 
-    # Create split directory if it does not exist
+    n = len(labels)
+    # Include dataset size so different-sized datasets get different splits
     split_dir = os.path.join(
-        data_dir, f"train_prop={train_prop}_global_seed={global_data_seed}"
+        data_dir,
+        f"n={n}_train_prop={train_prop}_global_seed={global_data_seed}",
     )
     generate_splits = False
     if not os.path.isdir(split_dir):
@@ -142,7 +149,6 @@ def random_splitting(labels, parameters, root=None, global_data_seed=42):
         torch.manual_seed(global_data_seed)
         np.random.seed(global_data_seed)
         # Generate a split
-        n = len(labels)
         train_num = int(n * train_prop)
         valid_num = int(n * valid_prop)
 
@@ -339,6 +345,17 @@ def load_inductive_splits(dataset, parameters):
             f"split_type {parameters.split_type} not valid. Choose either 'random', 'k-fold' or 'fixed'.\
             If 'fixed' is chosen, the dataset should have the attribute split_idx"
         )
+
+    # Log dataset and split sizes so runs can be compared (e.g. after changing dataset)
+    n_total = len(dataset)
+    n_train = len(split_idx["train"])
+    n_valid = len(split_idx["valid"])
+    n_test = len(split_idx["test"])
+    msg = (
+        f"[splits] dataset_size={n_total} | train={n_train} val={n_valid} test={n_test}"
+    )
+    log.info(msg)
+    print(msg)
 
     train_dataset, val_dataset, test_dataset = (
         assign_train_val_test_mask_to_graphs(dataset, split_idx)
