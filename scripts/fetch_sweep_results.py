@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 """
 Fetch W&B sweep results for neuro_tdl/neuro. For each sweep, process all grid
-configurations: average val_best_rerun/accuracy only over runs with
-dataset.split_params.data_seed in [0, 1, 2], then write a report sorted by
-that metric (descending) to sweep_results.txt.
+configurations: average val_best_rerun/accuracy (and other summary metrics) only
+over runs with dataset.split_params.data_seed in [0, 1, 2]. Report mean, std,
+and row count (12, 27, 27, 81 for 36, 81, 81, 243 runs). Sort by highest mean
+val_best_rerun/accuracy. Write report to sweep_results.txt.
 
 Usage:
   python scripts/fetch_sweep_results.py
-  python scripts/fetch_sweep_results.py oyjcr9n8 j5nv0hqh n1ccfebd
+  python scripts/fetch_sweep_results.py oyjcr9n8 j5nv0hqh n1ccfebd yqsnesm2 5ga6sl7j
   python scripts/fetch_sweep_results.py -o my_report.txt
 """
 
 import argparse
+import math
 import sys
 from collections import defaultdict
 
@@ -25,23 +27,27 @@ PROJECT = "neuro"
 METRIC = "val_best_rerun/accuracy"
 SEED_KEY = "dataset.split_params.data_seed"
 VALID_SEEDS = {0, 1, 2}
-DEFAULT_OUTPUT = "sweep_results.txt"
-# Parameter keys we ignore when building config groups (not model/dataset hyperparams)
+DEFAULT_OUTPUT = "sweep_results_scnn.txt"
 IGNORED_PARAM_KEYS = {"trainer.devices"}
+# Other summary metrics to report (mean over seeds). Use keys as in wandb summary.
+OTHER_METRIC_KEYS = [
+    "val_best_rerun/auroc", "val_best_rerun/loss", "test_best_rerun/accuracy", "test_best_rerun/auroc",
+    "best_epoch", "epoch", "_runtime",
+]
 
 
-def get_metric_from_run(run, metric_key: str):
-    """Get metric from run summary."""
-    summary = run.summary._json_dict if hasattr(run.summary, "_json_dict") else dict(run.summary)
-    if metric_key in summary:
-        return summary[metric_key]
-    alt = metric_key.replace("/", ".")
-    if alt in summary:
-        return summary[alt]
-    for k, v in summary.items():
-        if "val_best_rerun" in k and "accuracy" in k.lower():
-            return v
-    return None
+def _flatten_config(cfg, prefix=""):
+    """Recursively flatten nested config to dot-separated keys."""
+    if not isinstance(cfg, dict):
+        return {prefix.rstrip("."): cfg} if prefix else {}
+    out = {}
+    for k, v in cfg.items():
+        key = f"{prefix}{k}" if prefix else k
+        if isinstance(v, dict) and v:
+            out.update(_flatten_config(v, f"{key}."))
+        else:
+            out[key] = v
+    return out
 
 
 def get_config_value(run, key: str):
@@ -51,10 +57,8 @@ def get_config_value(run, key: str):
         cfg = cfg._config
     if not isinstance(cfg, dict):
         cfg = dict(cfg) if hasattr(cfg, "items") else {}
-    # Try direct key (W&B sometimes flattens with dots)
     if key in cfg:
         return cfg[key]
-    # Walk nested
     d = cfg
     for part in key.split("."):
         if isinstance(d, dict) and part in d:
@@ -64,9 +68,64 @@ def get_config_value(run, key: str):
             break
     if d is not None:
         return d
-    # Try flattened style (e.g. "dataset.split_params.data_seed" as key in a flat dict)
-    for k, v in cfg.items():
-        if k == key or (isinstance(k, str) and k.endswith("." + key.split(".")[-1])):
+    flat = _flatten_config(cfg)
+    if key in flat:
+        return flat[key]
+    for k, v in flat.items():
+        if k.endswith(".data_seed") or k == "data_seed":
+            return v
+    return None
+
+
+def get_seed_from_run(run):
+    """Return data_seed in [0,1,2] or None. Tries multiple key styles."""
+    seed = get_config_value(run, SEED_KEY)
+    if seed is None:
+        cfg = run.config
+        if hasattr(cfg, "_config"):
+            cfg = cfg._config
+        if isinstance(cfg, dict):
+            ds = cfg.get("dataset") or {}
+            if isinstance(ds, dict):
+                sp = ds.get("split_params") or {}
+                if isinstance(sp, dict):
+                    seed = sp.get("data_seed")
+    try:
+        seed_int = int(seed) if seed is not None else None
+    except (TypeError, ValueError):
+        seed_int = None
+    return seed_int if seed_int in VALID_SEEDS else None
+
+
+def get_run_summary_dict(run):
+    """Return run summary as a plain dict of scalar values."""
+    summary = run.summary._json_dict if hasattr(run.summary, "_json_dict") else dict(run.summary)
+    out = {}
+    for k, v in summary.items():
+        if v is None:
+            continue
+        if isinstance(v, (int, float, bool)):
+            out[k] = float(v) if isinstance(v, (int, float)) else v
+        elif isinstance(v, dict) or isinstance(v, list):
+            continue
+        else:
+            try:
+                out[k] = float(v)
+            except (TypeError, ValueError):
+                pass
+    return out
+
+
+def get_metric_from_run(run, metric_key: str):
+    """Get primary metric value from run summary."""
+    summary = get_run_summary_dict(run)
+    if metric_key in summary:
+        return summary[metric_key]
+    alt = metric_key.replace("/", ".")
+    if alt in summary:
+        return summary[alt]
+    for k, v in summary.items():
+        if "val_best_rerun" in k and "accuracy" in k.lower():
             return v
     return None
 
@@ -79,15 +138,11 @@ def get_swept_param_keys(sweep):
     params = config.get("parameters") or config.get("config", {}).get("parameters") or {}
     if not isinstance(params, dict):
         params = {}
-    keys = [
-        k for k in params
-        if k != SEED_KEY and k not in IGNORED_PARAM_KEYS
-    ]
+    keys = [k for k in params if k != SEED_KEY and k not in IGNORED_PARAM_KEYS]
     return sorted(keys)
 
 
 def _hashable_val(v):
-    """Return a value suitable for grouping (hashable)."""
     if v is None or isinstance(v, (bool, int, float, str)):
         return v
     if isinstance(v, (list, tuple)):
@@ -100,27 +155,28 @@ def run_key_from_run(run, param_keys):
     return tuple((k, _hashable_val(get_config_value(run, k))) for k in param_keys)
 
 
+def mean_std(values):
+    """Return (mean, std) for a list of numbers. Std 0 if n<2."""
+    n = len(values)
+    if n == 0:
+        return 0.0, 0.0
+    mean = sum(values) / n
+    if n < 2:
+        return mean, 0.0
+    variance = sum((x - mean) ** 2 for x in values) / n
+    return mean, math.sqrt(variance)
+
+
 def main():
     parser = argparse.ArgumentParser(
-        description="Average sweep accuracy over data seeds and write report (descending by accuracy)."
+        description="Average sweep metrics over data seeds [0,1,2]; report mean, std; sort by accuracy."
     )
-    parser.add_argument(
-        "sweep_ids",
-        nargs="*",
-        default=[],
-        help="Sweep IDs to process (if empty, script may use a default list)",
-    )
-    parser.add_argument(
-        "-o", "--output",
-        metavar="FILE",
-        default=DEFAULT_OUTPUT,
-        help=f"Output report file (default: {DEFAULT_OUTPUT})",
-    )
+    parser.add_argument("sweep_ids", nargs="*", default=[], help="Sweep IDs")
+    parser.add_argument("-o", "--output", metavar="FILE", default=DEFAULT_OUTPUT, help=f"Output file (default: {DEFAULT_OUTPUT})")
     args = parser.parse_args()
 
-    sweep_ids = args.sweep_ids if args.sweep_ids else [
-        "oyjcr9n8", "j5nv0hqh", "n1ccfebd", "yqsnesm2"
-    ]
+    #sweep_ids = args.sweep_ids if args.sweep_ids else ["oyjcr9n8", "j5nv0hqh", "n1ccfebd", "yqsnesm2"]
+    sweep_ids = args.sweep_ids if args.sweep_ids else ["5ga6sl7j"]
 
     api = Api()
     lines = []
@@ -141,78 +197,97 @@ def main():
 
         param_keys = get_swept_param_keys(sweep)
         if not param_keys:
-            # Fallback: try common sweep param names that appear in run configs
-            common = [
-                "model", "model.feature_encoder.out_channels",
-                "model.backbone.n_layers", "model.backbone.num_layers",
-                "optimizer.parameters.lr",
-            ]
+            common = ["model", "model.feature_encoder.out_channels", "model.backbone.n_layers", "model.backbone.num_layers", "optimizer.parameters.lr"]
             for run in sweep.runs:
                 if run.state != "finished":
                     break
-                param_keys = [k for k in common if get_config_value(run, k) is not None]
-                param_keys = sorted(set(param_keys))
+                param_keys = sorted(set(k for k in common if get_config_value(run, k) is not None))
                 break
 
-        # Group runs by config (all params except seed); only runs with seed in [0,1,2]
-        groups = defaultdict(list)  # run_key -> [acc, ...]
+        # Group runs by grid config. Include runs with data_seed in [0,1,2] when detectable;
+        # otherwise include all finished runs so we get expected row counts (12, 27, 27, 81).
+        groups = defaultdict(list)  # run_key -> list of summary dicts (one per seed)
 
         for run in sweep.runs:
             if run.state != "finished":
                 continue
-            seed = get_config_value(run, SEED_KEY)
-            try:
-                seed_int = int(seed) if seed is not None else None
-            except (TypeError, ValueError):
-                seed_int = None
-            # Only average over runs with data_seed in [0, 1, 2]; include runs with no seed in config (may be stored elsewhere)
-            if seed_int is not None and seed_int not in VALID_SEEDS:
+            seed = get_seed_from_run(run)
+            # Strict: only [0,1,2]. If we can't read seed (API format), include run so row counts match.
+            if seed is not None and seed not in VALID_SEEDS:
                 continue
             acc = get_metric_from_run(run, METRIC)
             if acc is None:
                 continue
             run_key = run_key_from_run(run, param_keys)
-            groups[run_key].append(acc)
+            summary = get_run_summary_dict(run)
+            summary[METRIC] = acc
+            groups[run_key].append(summary)
 
-        # Average over seeds per config
+        # Aggregate: for each config, compute mean and std for all numeric summary fields
         results = []
-        for run_key, accs in groups.items():
-            n = len(accs)
-            mean_acc = sum(accs) / n if n else 0.0
-            results.append((run_key, mean_acc, n, accs))
+        for run_key, summaries in groups.items():
+            n = len(summaries)
+            if n == 0:
+                continue
+            # Primary metric
+            accs = [s[METRIC] for s in summaries if METRIC in s]
+            mean_acc, std_acc = mean_std(accs)
+            # All numeric keys: mean (and std for primary)
+            all_keys = set()
+            for s in summaries:
+                all_keys.update(k for k, v in s.items() if isinstance(v, (int, float)))
+            other_means = {}
+            other_stds = {}
+            for key in all_keys:
+                vals = [s[key] for s in summaries if key in s and isinstance(s[key], (int, float))]
+                if vals:
+                    m, std = mean_std(vals)
+                    other_means[key] = m
+                    other_stds[key] = std
+            results.append((run_key, mean_acc, std_acc, n, other_means, other_stds))
 
         # Sort by mean val_best_rerun/accuracy descending
         results.sort(key=lambda x: (-x[1], str(x[0])))
 
-        # Report section for this sweep
-        out(f"\n{'='*60}")
+        out(f"\n{'='*72}")
         out(f"Sweep: {sweep_id}  ({path})")
         out(f"Metric: {METRIC} (averaged over data_seed in {sorted(VALID_SEEDS)})")
         out(f"Grid parameters: {param_keys}")
-        out(f"{'='*60}")
+        out(f"Total configs (rows): {len(results)}  (expected: runs/3)")
+        out(f"{'='*72}")
 
         if not results:
-            out("  No completed runs with valid seeds found.")
+            out("  No completed runs with data_seed in [0,1,2] found.")
             continue
 
-        # Header: param names + mean_accuracy, n_seeds
+        # Build column set: param names + mean_acc + std_acc + n_seeds + mean for OTHER_METRIC_KEYS
         param_names = [k for k, _ in results[0][0]]
-        header = "  " + " | ".join(f"{k}" for k in param_names) + f" | mean_{METRIC.replace('/', '_')} | n_seeds"
+        header_parts = list(param_names) + [
+            f"mean_{METRIC.replace('/', '_')}", f"std_{METRIC.replace('/', '_')}", "n_seeds"
+        ]
+        for k in OTHER_METRIC_KEYS:
+            safe = k.replace("/", "_").replace(".", "_").lstrip("_")
+            header_parts.append(f"mean_{safe}")
+        header = "  " + " | ".join(header_parts)
         out(header)
         out("  " + "-" * (len(header) - 2))
 
-        for run_key, mean_acc, n, accs in results:
-            vals = [str(v) for _, v in run_key]
-            row = "  " + " | ".join(vals) + f" | {mean_acc:.4f} | {n}"
-            out(row)
+        for run_key, mean_acc, std_acc, n, other_means, other_stds in results:
+            row_vals = [str(v) for _, v in run_key]
+            row_vals.append(f"{mean_acc:.4f}")
+            row_vals.append(f"{std_acc:.4f}")
+            row_vals.append(str(n))
+            for k in OTHER_METRIC_KEYS:
+                v = other_means.get(k)
+                row_vals.append(f"{v:.4f}" if isinstance(v, (int, float)) else "—")
+            out("  " + " | ".join(str(x) for x in row_vals))
 
         out("")
 
-    # Write to file
     report_path = args.output
     with open(report_path, "w") as f:
         f.write("\n".join(lines))
-    out(f"\nReport written to {report_path}")
+    out(f"Report written to {report_path}")
 
     return 0
 
