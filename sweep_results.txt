@@ -1,309 +1,149 @@
-wandb: [wandb.Api()] Loaded credentials for https://api.wandb.ai from /home/gcastelazo/.netrc.
 
-=== Sweep oyjcr9n8 (neuro_tdl/neuro/oyjcr9n8) ===
-  out_channels=8, n_layers=None, lr=0.0001: n_runs=3, mean(val_best_rerun/accuracy)=0.1982  (values: [0.1622, 0.2703, 0.1622])
-  out_channels=8, n_layers=None, lr=0.001: n_runs=3, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1622, 0.2432, 0.1622])
-  out_channels=8, n_layers=None, lr=0.01: n_runs=3, mean(val_best_rerun/accuracy)=0.1802  (values: [0.1622, 0.1622, 0.2162])
-  out_channels=16, n_layers=None, lr=0.0001: n_runs=3, mean(val_best_rerun/accuracy)=0.1982  (values: [0.1892, 0.1892, 0.2162])
-  out_channels=16, n_layers=None, lr=0.001: n_runs=3, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892, 0.2162, 0.1622])
-  out_channels=16, n_layers=None, lr=0.01: n_runs=3, mean(val_best_rerun/accuracy)=0.2162  (values: [0.1892, 0.2162, 0.2432])
-  out_channels=32, n_layers=None, lr=0.0001: n_runs=3, mean(val_best_rerun/accuracy)=0.1441  (values: [0.1622, 0.1081, 0.1622])
-  out_channels=32, n_layers=None, lr=0.001: n_runs=3, mean(val_best_rerun/accuracy)=0.1712  (values: [0.1892, 0.1081, 0.2162])
-  out_channels=32, n_layers=None, lr=0.01: n_runs=3, mean(val_best_rerun/accuracy)=0.1982  (values: [0.1351, 0.1351, 0.3243])
-  out_channels=64, n_layers=None, lr=0.0001: n_runs=3, mean(val_best_rerun/accuracy)=0.1441  (values: [0.1622, 0.1892, 0.0811])
-  out_channels=64, n_layers=None, lr=0.001: n_runs=3, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622, 0.1892, 0.1351])
-  out_channels=64, n_layers=None, lr=0.01: n_runs=3, mean(val_best_rerun/accuracy)=0.2252  (values: [0.1622, 0.2703, 0.2432])
+============================================================
+Sweep: oyjcr9n8  (neuro_tdl/neuro/oyjcr9n8)
+Metric: val_best_rerun/accuracy (averaged over data_seed in [0, 1, 2])
+Grid parameters: ['model.feature_encoder.out_channels', 'optimizer.parameters.lr']
+============================================================
+  model.feature_encoder.out_channels | optimizer.parameters.lr | mean_val_best_rerun_accuracy | n_seeds
+  -----------------------------------------------------------------------------------------------------
+  64 | 0.01 | 0.2252 | 3
+  16 | 0.01 | 0.2162 | 3
+  16 | 0.0001 | 0.1982 | 3
+  32 | 0.01 | 0.1982 | 3
+  8 | 0.0001 | 0.1982 | 3
+  16 | 0.001 | 0.1892 | 3
+  8 | 0.001 | 0.1892 | 3
+  8 | 0.01 | 0.1802 | 3
+  32 | 0.001 | 0.1712 | 3
+  64 | 0.001 | 0.1622 | 3
+  64 | 0.0001 | 0.1441 | 3
+  32 | 0.0001 | 0.1441 | 3
 
-=== Sweep j5nv0hqh (neuro_tdl/neuro/j5nv0hqh) ===
-  out_channels=8, n_layers=1, lr=0.0001: n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  out_channels=8, n_layers=1, lr=0.001: n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  out_channels=8, n_layers=1, lr=0.01: n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  out_channels=8, n_layers=2, lr=0.0001: n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  out_channels=8, n_layers=2, lr=0.001: n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  out_channels=8, n_layers=2, lr=0.01: n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  out_channels=16, n_layers=1, lr=0.0001: n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  out_channels=16, n_layers=1, lr=0.001: n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  out_channels=16, n_layers=1, lr=0.01: n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  out_channels=32, n_layers=1, lr=0.0001: n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  out_channels=32, n_layers=1, lr=0.001: n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  out_channels=32, n_layers=1, lr=0.01: n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
 
-=== Sweep n1ccfebd (neuro_tdl/neuro/n1ccfebd) ===
-  out_channels=8, n_layers=1, lr=0.0001: n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  out_channels=8, n_layers=1, lr=0.001: n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  out_channels=8, n_layers=1, lr=0.01: n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  out_channels=16, n_layers=1, lr=0.0001: n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  out_channels=16, n_layers=1, lr=0.001: n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  out_channels=16, n_layers=1, lr=0.01: n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  out_channels=32, n_layers=1, lr=0.0001: n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  out_channels=32, n_layers=1, lr=0.001: n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  out_channels=32, n_layers=1, lr=0.01: n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
+============================================================
+Sweep: j5nv0hqh  (neuro_tdl/neuro/j5nv0hqh)
+Metric: val_best_rerun/accuracy (averaged over data_seed in [0, 1, 2])
+Grid parameters: ['model.backbone.n_layers', 'model.feature_encoder.out_channels', 'optimizer.parameters.lr']
+============================================================
+  model.backbone.n_layers | model.feature_encoder.out_channels | optimizer.parameters.lr | mean_val_best_rerun_accuracy | n_seeds
+  -------------------------------------------------------------------------------------------------------------------------------
+  1 | 16 | 0.01 | 0.2432 | 1
+  2 | 8 | 0.01 | 0.2432 | 1
+  1 | 16 | 0.0001 | 0.2162 | 1
+  1 | 8 | 0.001 | 0.2162 | 1
+  1 | 8 | 0.01 | 0.2162 | 1
+  2 | 8 | 0.0001 | 0.2162 | 1
+  1 | 32 | 0.0001 | 0.1892 | 1
+  1 | 32 | 0.01 | 0.1892 | 1
+  2 | 8 | 0.001 | 0.1892 | 1
+  1 | 16 | 0.001 | 0.1622 | 1
+  1 | 32 | 0.001 | 0.1622 | 1
+  1 | 8 | 0.0001 | 0.1622 | 1
 
-=== Sweep yqsnesm2 (neuro_tdl/neuro/yqsnesm2) ===
-  group=('07cjadpr', 'pretty-sweep-56'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('09q6xhmp', 'amber-sweep-104'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('0a4vm94s', 'fallen-sweep-205'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('0cfllh2n', 'fragrant-sweep-181'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('0hpyey4k', 'glamorous-sweep-111'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('0oen8f6e', 'ancient-sweep-130'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('0qkyjc53', 'zany-sweep-13'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('0wgjx4sg', 'fancy-sweep-198'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('10a7n4gi', 'mild-sweep-214'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('12y50puw', 'valiant-sweep-164'): n_runs=1, mean(val_best_rerun/accuracy)=0.0811  (values: [0.0811])
-  group=('1e01dcq7', 'northern-sweep-163'): n_runs=1, mean(val_best_rerun/accuracy)=0.0811  (values: [0.0811])
-  group=('1eskovim', 'dandy-sweep-21'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('1rckpcwl', 'warm-sweep-151'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('1vixo99u', 'likely-sweep-178'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('1vngnhsr', 'cosmic-sweep-45'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('2ajr2wyd', 'dark-sweep-95'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('2j7t16uu', 'zesty-sweep-50'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('2tog9lek', 'elated-sweep-177'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('2vmg42m1', 'dark-sweep-16'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('2wzs0wyi', 'worthy-sweep-102'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('36c45dhw', 'swift-sweep-26'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('38eaoayv', 'polar-sweep-115'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('395tgrln', 'ancient-sweep-229'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('39uo2m4f', 'laced-sweep-170'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('3fp75bm3', 'sparkling-sweep-99'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('3hfc592p', 'golden-sweep-6'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('3idbi27h', 'dulcet-sweep-125'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('3le0rodo', 'misunderstood-sweep-59'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('3vy86jg9', 'radiant-sweep-134'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('4ab4vx4j', 'faithful-sweep-43'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('4c5shi29', 'jumping-sweep-162'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('4eh60dxt', 'firm-sweep-71'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('4eqan9qi', 'stoic-sweep-235'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('4g6nckhh', 'hopeful-sweep-30'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('4js1eq3e', 'blooming-sweep-171'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('4jv6u0zt', 'fast-sweep-25'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('4p3lqwzo', 'valiant-sweep-201'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('4som0dps', 'denim-sweep-36'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('4zyce2je', 'brisk-sweep-87'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('50usi4q5', 'flowing-sweep-54'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('564gk85t', 'hopeful-sweep-150'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('5gjfw0mo', 'solar-sweep-139'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('5jqq9esq', 'treasured-sweep-133'): n_runs=1, mean(val_best_rerun/accuracy)=0.1081  (values: [0.1081])
-  group=('5kmehqrw', 'youthful-sweep-176'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('5sydrjfo', 'zany-sweep-182'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('5wk9351x', 'lunar-sweep-185'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('668stvh5', 'sandy-sweep-15'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('6a2ak3jr', 'serene-sweep-72'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('6a9nqxv3', 'quiet-sweep-32'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('6apm9t8z', 'fresh-sweep-196'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('6lfzmmns', 'effortless-sweep-135'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('6md7w5xq', 'true-sweep-12'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('6n2fbg2e', 'curious-sweep-147'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('6nk9n7kr', 'laced-sweep-28'): n_runs=1, mean(val_best_rerun/accuracy)=0.1081  (values: [0.1081])
-  group=('6r4d05k7', 'young-sweep-77'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('6zy6h6i9', 'charmed-sweep-233'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('71o9o7m6', 'upbeat-sweep-152'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('7lv81ivn', 'floral-sweep-84'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('7mmln3xy', 'jumping-sweep-222'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('8af6u2rh', 'happy-sweep-225'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('8bc6vul0', 'warm-sweep-18'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('8c6bceyx', 'feasible-sweep-189'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('8i80f4sw', 'deep-sweep-234'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('8njmfr1k', 'northern-sweep-42'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('8s5ggkyj', 'worldly-sweep-19'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('8s8jibyp', 'balmy-sweep-114'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('8v69pvoj', 'zesty-sweep-112'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('8zipefc4', 'faithful-sweep-81'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('92kg5qp6', 'smart-sweep-88'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('9gqbwkrp', 'faithful-sweep-172'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('9kt5rvnf', 'feasible-sweep-64'): n_runs=1, mean(val_best_rerun/accuracy)=0.1081  (values: [0.1081])
-  group=('9n47n0yb', 'charmed-sweep-187'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('9nlxcj3t', 'sparkling-sweep-197'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('a4h6iary', 'fresh-sweep-103'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('a5tux2yi', 'drawn-sweep-237'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('ab2uhvuf', 'charmed-sweep-165'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('agmueeoh', 'giddy-sweep-124'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('aix73k0u', 'fresh-sweep-136'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('amftxsz9', 'robust-sweep-158'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('apjog91y', 'charmed-sweep-199'): n_runs=1, mean(val_best_rerun/accuracy)=0.0811  (values: [0.0811])
-  group=('arhqdwks', 'ethereal-sweep-230'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('au11hpqr', 'glamorous-sweep-31'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('aukcjk21', 'deep-sweep-157'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('b16unzk5', 'clean-sweep-38'): n_runs=1, mean(val_best_rerun/accuracy)=0.1081  (values: [0.1081])
-  group=('b2a08iel', 'crisp-sweep-155'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('b38tii4t', 'warm-sweep-48'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('b73w1e4p', 'ethereal-sweep-98'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('bel7gyzs', 'cool-sweep-37'): n_runs=1, mean(val_best_rerun/accuracy)=0.1081  (values: [0.1081])
-  group=('bg0dbx11', 'eager-sweep-183'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('bo4mjpx3', 'graceful-sweep-83'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('bu7hn9vu', 'azure-sweep-119'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('bxhrxb7k', 'peach-sweep-144'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('c2d42lkf', 'cosmic-sweep-202'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('c5lhpcs1', 'sweepy-sweep-58'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('c6jnkuu7', 'whole-sweep-34'): n_runs=1, mean(val_best_rerun/accuracy)=0.1081  (values: [0.1081])
-  group=('c9aib79x', 'peach-sweep-90'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('cadyi4g7', 'fiery-sweep-238'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('cucom5eo', 'clear-sweep-24'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('d391vyf0', 'winter-sweep-168'): n_runs=1, mean(val_best_rerun/accuracy)=0.2973  (values: [0.2973])
-  group=('dbcfmxgd', 'comic-sweep-82'): n_runs=1, mean(val_best_rerun/accuracy)=0.1081  (values: [0.1081])
-  group=('dnaktryg', 'grateful-sweep-11'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('dod1m51k', 'robust-sweep-1'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('ds4l0bzl', 'blooming-sweep-67'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('dsw86mng', 'snowy-sweep-160'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('dtthbvr3', 'mild-sweep-220'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('dv434zvi', 'pious-sweep-7'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('dw5tttie', 'dandy-sweep-94'): n_runs=1, mean(val_best_rerun/accuracy)=0.0811  (values: [0.0811])
-  group=('dwaysdcj', 'golden-sweep-213'): n_runs=1, mean(val_best_rerun/accuracy)=0.2973  (values: [0.2973])
-  group=('dz75sqlf', 'dazzling-sweep-173'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('e7765fjh', 'fresh-sweep-137'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('e8algzis', 'lyric-sweep-191'): n_runs=1, mean(val_best_rerun/accuracy)=0.2973  (values: [0.2973])
-  group=('ennzztan', 'cerulean-sweep-179'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('eown6bjx', 'expert-sweep-85'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('ez10sn36', 'dry-sweep-61'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('f0f1e82m', 'lunar-sweep-55'): n_runs=1, mean(val_best_rerun/accuracy)=0.1081  (values: [0.1081])
-  group=('ff7xg120', 'morning-sweep-148'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('fg2hd2jh', 'dutiful-sweep-206'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('fjd7t9to', 'easy-sweep-121'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('fkk8arlf', 'eager-sweep-75'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('fpe204gt', 'summer-sweep-46'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('ft79p2ul', 'sparkling-sweep-226'): n_runs=1, mean(val_best_rerun/accuracy)=0.1081  (values: [0.1081])
-  group=('fw4o6xcu', 'stoic-sweep-100'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('fxf2msbz', 'devoted-sweep-69'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('g2f2soqv', 'fancy-sweep-211'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('g6remqe0', 'easy-sweep-73'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('g6xp7uxr', 'wobbly-sweep-92'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('g75gj14h', 'olive-sweep-126'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('g9n0mpcw', 'driven-sweep-116'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('gfqwqnhk', 'expert-sweep-39'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('gt3rawtk', 'crimson-sweep-224'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('gvaa38z8', 'graceful-sweep-186'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('h4dm4k1l', 'quiet-sweep-14'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('h4qwvzom', 'different-sweep-156'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('h8gd1cuw', 'absurd-sweep-109'): n_runs=1, mean(val_best_rerun/accuracy)=0.1081  (values: [0.1081])
-  group=('hbeluybh', 'bright-sweep-154'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('hs7wf8u7', 'true-sweep-153'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('i174uxtg', 'peach-sweep-60'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('i9574met', 'curious-sweep-140'): n_runs=1, mean(val_best_rerun/accuracy)=0.1081  (values: [0.1081])
-  group=('iqlmjl05', 'zesty-sweep-113'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('irko6ray', 'avid-sweep-63'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('j4fqavvc', 'divine-sweep-22'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('j6c502km', 'wise-sweep-44'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('jh128rnx', 'sunny-sweep-86'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('jmhcuasz', 'upbeat-sweep-117'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('k0x3ws86', 'pious-sweep-184'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('k1gi8ni2', 'wobbly-sweep-57'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('k3t6o29f', 'smooth-sweep-120'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('k9bm0njc', 'vital-sweep-216'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('kj6fw6ul', 'treasured-sweep-194'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('kjrb5emg', 'volcanic-sweep-209'): n_runs=1, mean(val_best_rerun/accuracy)=0.1081  (values: [0.1081])
-  group=('l3kfs7ht', 'glorious-sweep-204'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('l9a9ywev', 'honest-sweep-243'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('ljue7hlm', 'fearless-sweep-79'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('lm1wpthw', 'blooming-sweep-236'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('lqfvfgwp', 'different-sweep-210'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('lzr484vq', 'tough-sweep-203'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('m66wc3l4', 'youthful-sweep-223'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('md2nuxl0', 'curious-sweep-227'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('mdkz35vv', 'azure-sweep-207'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('mlj7rpf0', 'denim-sweep-96'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('mr4epzvi', 'electric-sweep-17'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('mvwd2gj4', 'lively-sweep-123'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('n09bu9hj', 'rich-sweep-65'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('n539mpb0', 'pretty-sweep-231'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('nda8vw56', 'feasible-sweep-132'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('njiia0p2', 'bright-sweep-29'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('njkczkd8', 'astral-sweep-53'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('nnfc6vyk', 'sage-sweep-208'): n_runs=1, mean(val_best_rerun/accuracy)=0.0811  (values: [0.0811])
-  group=('ns77962f', 'earnest-sweep-217'): n_runs=1, mean(val_best_rerun/accuracy)=0.3243  (values: [0.3243])
-  group=('nu9ryn0w', 'kind-sweep-159'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('nym0a33x', 'honest-sweep-23'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('oc23aw8b', 'colorful-sweep-66'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('oc7rrzxl', 'silvery-sweep-47'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('ooc8tzre', 'cerulean-sweep-219'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('osdqh8d5', 'effortless-sweep-161'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('oualggab', 'hearty-sweep-10'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('ov4r1u2y', 'sweepy-sweep-129'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('oxi90i60', 'noble-sweep-62'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('pd7ggur2', 'bumbling-sweep-180'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('pdd011ya', 'restful-sweep-166'): n_runs=1, mean(val_best_rerun/accuracy)=0.2973  (values: [0.2973])
-  group=('pe3vy9jt', 'rose-sweep-122'): n_runs=1, mean(val_best_rerun/accuracy)=0.2973  (values: [0.2973])
-  group=('pneufmkk', 'fresh-sweep-91'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('puh2zo8t', 'ethereal-sweep-40'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('pvutqs95', 'daily-sweep-192'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('px2kcco4', 'light-sweep-110'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('qys08gur', 'quiet-sweep-70'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('r34clyzb', 'classic-sweep-78'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('r8tarctg', 'tough-sweep-93'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('rfyycdi3', 'glowing-sweep-131'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('rw6rj1jf', 'polished-sweep-143'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('shvcmeiz', 'summer-sweep-200'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('slgpk500', 'fluent-sweep-107'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('sqjsi7oj', 'devoted-sweep-169'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('sry57fnp', 'magic-sweep-215'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('sw4lsl9l', 'eternal-sweep-35'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('sxn0xc7q', 'confused-sweep-146'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('t05jp3pv', 'stoic-sweep-20'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('t3y5eeq3', 'denim-sweep-241'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('tbgzme7q', 'pleasant-sweep-89'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('tecdfxag', 'unique-sweep-101'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('u50bnop9', 'genial-sweep-27'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('udghidu7', 'fresh-sweep-80'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('udve0o54', 'fine-sweep-228'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('ujz0m7ce', 'dry-sweep-2'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('ulye2yea', 'stoic-sweep-218'): n_runs=1, mean(val_best_rerun/accuracy)=0.3243  (values: [0.3243])
-  group=('um449z2c', 'dashing-sweep-118'): n_runs=1, mean(val_best_rerun/accuracy)=0.1081  (values: [0.1081])
-  group=('v4k3wq30', 'vital-sweep-108'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('via23avc', 'vital-sweep-221'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('viy0um0i', 'valiant-sweep-174'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('vn7qedd6', 'proud-sweep-195'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('w3hw0c16', 'tough-sweep-4'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('w3ufp3k1', 'jumping-sweep-8'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('wh0s9h3d', 'youthful-sweep-49'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('wi3f1thi', 'fallen-sweep-3'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('wortq7dx', 'divine-sweep-5'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('wr7tvgt3', 'feasible-sweep-145'): n_runs=1, mean(val_best_rerun/accuracy)=0.0811  (values: [0.0811])
-  group=('wtg63rj6', 'brisk-sweep-141'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('x1vwtt0a', 'royal-sweep-239'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('xegcxuf4', 'trim-sweep-142'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('xi4xi7gm', 'daily-sweep-193'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('xpnctbsz', 'summer-sweep-190'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('xshxsro6', 'still-sweep-106'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('xsny4ya9', 'flowing-sweep-51'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
-  group=('y2jyzndw', 'neat-sweep-232'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('y351ebvn', 'rural-sweep-138'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('y4abxm6r', 'wise-sweep-41'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('y612ae1a', 'spring-sweep-127'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('y6wk6y5i', 'trim-sweep-74'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('yajay4y8', 'sweepy-sweep-212'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('yc4u4vl4', 'polar-sweep-76'): n_runs=1, mean(val_best_rerun/accuracy)=0.2703  (values: [0.2703])
-  group=('yftnx4yd', 'likely-sweep-128'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('yhxiaep2', 'bumbling-sweep-105'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('yi0b15jx', 'hardy-sweep-9'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('ypcqvag5', 'morning-sweep-68'): n_runs=1, mean(val_best_rerun/accuracy)=0.2432  (values: [0.2432])
-  group=('z7747zqs', 'stellar-sweep-167'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('z91k3mc4', 'crisp-sweep-149'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('z9eqa8kr', 'driven-sweep-52'): n_runs=1, mean(val_best_rerun/accuracy)=0.2162  (values: [0.2162])
-  group=('zjgwv5sg', 'logical-sweep-242'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('zmy6r7a0', 'misty-sweep-175'): n_runs=1, mean(val_best_rerun/accuracy)=0.1892  (values: [0.1892])
-  group=('zrranjf2', 'ancient-sweep-33'): n_runs=1, mean(val_best_rerun/accuracy)=0.1351  (values: [0.1351])
-  group=('zumuvinj', 'polar-sweep-97'): n_runs=1, mean(val_best_rerun/accuracy)=0.1622  (values: [0.1622])
 
---- Summary (averaged over 3 seeds per config) ---
-  out_channels=8, n_layers=None, lr=0.0001: mean_accuracy=0.1982  (from 1 sweeps: [0.1982])
-  out_channels=8, n_layers=None, lr=0.001: mean_accuracy=0.1892  (from 1 sweeps: [0.1892])
-  out_channels=8, n_layers=None, lr=0.01: mean_accuracy=0.1802  (from 1 sweeps: [0.1802])
-  out_channels=8, n_layers=1, lr=0.0001: mean_accuracy=0.1622  (from 2 sweeps: [0.1622, 0.1622])
-  out_channels=8, n_layers=1, lr=0.001: mean_accuracy=0.1892  (from 2 sweeps: [0.2162, 0.1622])
-  out_channels=8, n_layers=1, lr=0.01: mean_accuracy=0.2027  (from 2 sweeps: [0.2162, 0.1892])
-  out_channels=8, n_layers=2, lr=0.0001: mean_accuracy=0.2162  (from 1 sweeps: [0.2162])
-  out_channels=8, n_layers=2, lr=0.001: mean_accuracy=0.1892  (from 1 sweeps: [0.1892])
-  out_channels=8, n_layers=2, lr=0.01: mean_accuracy=0.2432  (from 1 sweeps: [0.2432])
-  out_channels=16, n_layers=None, lr=0.0001: mean_accuracy=0.1982  (from 1 sweeps: [0.1982])
-  out_channels=16, n_layers=None, lr=0.001: mean_accuracy=0.1892  (from 1 sweeps: [0.1892])
-  out_channels=16, n_layers=None, lr=0.01: mean_accuracy=0.2162  (from 1 sweeps: [0.2162])
-  out_channels=16, n_layers=1, lr=0.0001: mean_accuracy=0.1892  (from 2 sweeps: [0.2162, 0.1622])
-  out_channels=16, n_layers=1, lr=0.001: mean_accuracy=0.1757  (from 2 sweeps: [0.1622, 0.1892])
-  out_channels=16, n_layers=1, lr=0.01: mean_accuracy=0.2568  (from 2 sweeps: [0.2432, 0.2703])
-  out_channels=32, n_layers=None, lr=0.0001: mean_accuracy=0.1441  (from 1 sweeps: [0.1441])
-  out_channels=32, n_layers=None, lr=0.001: mean_accuracy=0.1712  (from 1 sweeps: [0.1712])
-  out_channels=32, n_layers=None, lr=0.01: mean_accuracy=0.1982  (from 1 sweeps: [0.1982])
-  out_channels=32, n_layers=1, lr=0.0001: mean_accuracy=0.1622  (from 2 sweeps: [0.1892, 0.1351])
-  out_channels=32, n_layers=1, lr=0.001: mean_accuracy=0.1622  (from 2 sweeps: [0.1622, 0.1622])
-  out_channels=32, n_layers=1, lr=0.01: mean_accuracy=0.1757  (from 2 sweeps: [0.1892, 0.1622])
-  out_channels=64, n_layers=None, lr=0.0001: mean_accuracy=0.1441  (from 1 sweeps: [0.1441])
-  out_channels=64, n_layers=None, lr=0.001: mean_accuracy=0.1622  (from 1 sweeps: [0.1622])
-  out_channels=64, n_layers=None, lr=0.01: mean_accuracy=0.2252  (from 1 sweeps: [0.2252])
+============================================================
+Sweep: n1ccfebd  (neuro_tdl/neuro/n1ccfebd)
+Metric: val_best_rerun/accuracy (averaged over data_seed in [0, 1, 2])
+Grid parameters: ['model.backbone.n_layers', 'model.feature_encoder.out_channels', 'optimizer.parameters.lr']
+============================================================
+  model.backbone.n_layers | model.feature_encoder.out_channels | optimizer.parameters.lr | mean_val_best_rerun_accuracy | n_seeds
+  -------------------------------------------------------------------------------------------------------------------------------
+  1 | 16 | 0.01 | 0.2703 | 1
+  1 | 16 | 0.001 | 0.1892 | 1
+  1 | 8 | 0.01 | 0.1892 | 1
+  1 | 16 | 0.0001 | 0.1622 | 1
+  1 | 32 | 0.001 | 0.1622 | 1
+  1 | 32 | 0.01 | 0.1622 | 1
+  1 | 8 | 0.0001 | 0.1622 | 1
+  1 | 8 | 0.001 | 0.1622 | 1
+  1 | 32 | 0.0001 | 0.1351 | 1
+
+
+============================================================
+Sweep: yqsnesm2  (neuro_tdl/neuro/yqsnesm2)
+Metric: val_best_rerun/accuracy (averaged over data_seed in [0, 1, 2])
+Grid parameters: ['model', 'model.backbone.num_layers', 'model.feature_encoder.out_channels', 'optimizer.parameters.lr']
+============================================================
+  model | model.backbone.num_layers | model.feature_encoder.out_channels | optimizer.parameters.lr | mean_val_best_rerun_accuracy | n_seeds
+  -----------------------------------------------------------------------------------------------------------------------------------------
+  graph/gin | 2 | 16 | 0.01 | 0.2613 | 3
+  graph/gin | 1 | 8 | 0.001 | 0.2523 | 3
+  graph/gin | 3 | 32 | 0.01 | 0.2432 | 3
+  graph/gat | 3 | 16 | 0.01 | 0.2432 | 3
+  graph/gat | 2 | 16 | 0.001 | 0.2342 | 3
+  graph/gin | 3 | 8 | 0.01 | 0.2342 | 3
+  graph/gcn | 1 | 32 | 0.0001 | 0.2342 | 3
+  graph/gin | 3 | 16 | 0.0001 | 0.2342 | 3
+  graph/gat | 1 | 16 | 0.001 | 0.2252 | 3
+  graph/gat | 3 | 32 | 0.01 | 0.2252 | 3
+  graph/gcn | 1 | 16 | 0.0001 | 0.2252 | 3
+  graph/gcn | 1 | 8 | 0.01 | 0.2252 | 3
+  graph/gcn | 2 | 16 | 0.01 | 0.2252 | 3
+  graph/gcn | 3 | 32 | 0.01 | 0.2252 | 3
+  graph/gin | 3 | 16 | 0.001 | 0.2252 | 3
+  graph/gat | 1 | 8 | 0.001 | 0.2252 | 3
+  graph/gat | 2 | 32 | 0.01 | 0.2252 | 3
+  graph/gcn | 1 | 16 | 0.01 | 0.2252 | 3
+  graph/gcn | 2 | 8 | 0.01 | 0.2252 | 3
+  graph/gin | 1 | 32 | 0.001 | 0.2252 | 3
+  graph/gin | 3 | 8 | 0.001 | 0.2252 | 3
+  graph/gcn | 2 | 8 | 0.0001 | 0.2252 | 3
+  graph/gcn | 1 | 32 | 0.01 | 0.2162 | 3
+  graph/gin | 1 | 16 | 0.01 | 0.2162 | 3
+  graph/gin | 2 | 32 | 0.0001 | 0.2162 | 3
+  graph/gin | 2 | 32 | 0.001 | 0.2162 | 3
+  graph/gcn | 2 | 32 | 0.01 | 0.2162 | 3
+  graph/gin | 1 | 32 | 0.01 | 0.2162 | 3
+  graph/gat | 1 | 8 | 0.01 | 0.2162 | 3
+  graph/gin | 2 | 8 | 0.01 | 0.2162 | 3
+  graph/gat | 3 | 16 | 0.0001 | 0.2072 | 3
+  graph/gat | 3 | 16 | 0.001 | 0.2072 | 3
+  graph/gcn | 3 | 8 | 0.01 | 0.2072 | 3
+  graph/gin | 2 | 16 | 0.001 | 0.2072 | 3
+  graph/gin | 2 | 32 | 0.01 | 0.2072 | 3
+  graph/gin | 1 | 8 | 0.0001 | 0.2072 | 3
+  graph/gat | 2 | 32 | 0.001 | 0.1982 | 3
+  graph/gcn | 3 | 16 | 0.0001 | 0.1982 | 3
+  graph/gat | 3 | 8 | 0.01 | 0.1982 | 3
+  graph/gcn | 2 | 8 | 0.001 | 0.1892 | 3
+  graph/gin | 3 | 16 | 0.01 | 0.1892 | 2
+  graph/gin | 3 | 32 | 0.001 | 0.1892 | 3
+  graph/gat | 2 | 16 | 0.01 | 0.1892 | 3
+  graph/gat | 2 | 32 | 0.0001 | 0.1892 | 3
+  graph/gat | 2 | 8 | 0.01 | 0.1892 | 3
+  graph/gcn | 3 | 32 | 0.0001 | 0.1892 | 3
+  graph/gcn | 3 | 8 | 0.0001 | 0.1892 | 3
+  graph/gcn | 3 | 8 | 0.001 | 0.1892 | 3
+  graph/gin | 1 | 16 | 0.0001 | 0.1892 | 3
+  graph/gin | 3 | 32 | 0.0001 | 0.1892 | 3
+  graph/gin | 2 | 8 | 0.001 | 0.1892 | 3
+  graph/gat | 1 | 16 | 0.01 | 0.1802 | 3
+  graph/gat | 2 | 16 | 0.0001 | 0.1802 | 3
+  graph/gat | 3 | 32 | 0.001 | 0.1802 | 3
+  graph/gcn | 1 | 32 | 0.001 | 0.1802 | 3
+  graph/gcn | 3 | 16 | 0.01 | 0.1802 | 3
+  graph/gin | 1 | 32 | 0.0001 | 0.1802 | 3
+  graph/gcn | 2 | 32 | 0.0001 | 0.1802 | 3
+  graph/gin | 3 | 8 | 0.0001 | 0.1802 | 3
+  graph/gcn | 3 | 32 | 0.001 | 0.1757 | 2
+  graph/gat | 3 | 32 | 0.0001 | 0.1712 | 3
+  graph/gin | 1 | 16 | 0.001 | 0.1712 | 3
+  graph/gcn | 2 | 16 | 0.001 | 0.1712 | 3
+  graph/gcn | 2 | 32 | 0.001 | 0.1712 | 3
+  graph/gin | 2 | 16 | 0.0001 | 0.1712 | 3
+  graph/gat | 1 | 32 | 0.01 | 0.1622 | 3
+  graph/gin | 1 | 8 | 0.01 | 0.1622 | 3
+  graph/gat | 2 | 8 | 0.001 | 0.1532 | 3
+  graph/gat | 3 | 8 | 0.001 | 0.1532 | 3
+  graph/gat | 1 | 16 | 0.0001 | 0.1532 | 3
+  graph/gat | 3 | 8 | 0.0001 | 0.1532 | 3
+  graph/gat | 1 | 32 | 0.001 | 0.1532 | 3
+  graph/gcn | 1 | 16 | 0.001 | 0.1532 | 3
+  graph/gcn | 3 | 16 | 0.001 | 0.1532 | 3
+  graph/gat | 1 | 8 | 0.0001 | 0.1441 | 3
+  graph/gat | 1 | 32 | 0.0001 | 0.1441 | 3
+  graph/gcn | 2 | 16 | 0.0001 | 0.1441 | 3
+  graph/gcn | 1 | 8 | 0.001 | 0.1261 | 3
+  graph/gcn | 1 | 8 | 0.0001 | 0.1171 | 3
+  graph/gat | 2 | 8 | 0.0001 | 0.0991 | 3
+  graph/gin | 2 | 8 | 0.0001 | 0.0991 | 3
