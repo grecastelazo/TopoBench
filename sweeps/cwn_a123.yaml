@@ -22,8 +22,6 @@ parameters:
   trainer.devices:
     values: [[1]] # Run on different GPUs to speed up the sweep
 
-# Optional: cap total number of runs for the sweep
-run_cap: 30
 
 command:
   - ${env}
