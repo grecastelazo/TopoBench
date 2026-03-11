@@ -100,7 +100,7 @@ class TriangleClassifier(BaseTriangleClassifier):
         if common >= 3:
             embedding_class = "core"
         elif common == 0:
-            embedding_class = "isolated" 
+            embedding_class = "isolated"
         else:
             embedding_class = "bridge"
 

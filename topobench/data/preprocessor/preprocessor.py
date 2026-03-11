@@ -5,8 +5,8 @@ import os
 
 import torch
 import torch_geometric
-from tqdm import tqdm
 from torch_geometric.io import fs
+from tqdm import tqdm
 
 from topobench.data.utils import (
     ensure_serializable,

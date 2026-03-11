@@ -282,7 +282,9 @@ def select_neighborhoods_of_interest(connectivity, neighborhoods):
                         "adjacency" in neighborhood_type
                         or "laplacian" in neighborhood_type
                     ):
-                        direction, connectivity_type = neighborhood_type.split("_")
+                        direction, connectivity_type = neighborhood_type.split(
+                            "_"
+                        )
                         if direction == "up":
                             # Multiply consecutive incidence matrices up to getting the desired rank
                             matrix = torch.sparse.mm(
@@ -332,7 +334,9 @@ def select_neighborhoods_of_interest(connectivity, neighborhoods):
                                 else matrix
                             )
                     elif "incidence" in neighborhood_type:
-                        direction, connectivity_type = neighborhood_type.split("_")
+                        direction, connectivity_type = neighborhood_type.split(
+                            "_"
+                        )
                         if direction == "up":
                             # Multiply consecutive incidence matrices up to getting the desired rank
                             matrix = torch.sparse.mm(
@@ -370,7 +374,9 @@ def select_neighborhoods_of_interest(connectivity, neighborhoods):
                                 )
                             )
                 else:
-                    useful_connectivity[neighborhood] = connectivity[neighborhood]
+                    useful_connectivity[neighborhood] = connectivity[
+                        neighborhood
+                    ]
             except:  # noqa: E722
                 raise ValueError(f"Invalid neighborhood {neighborhood}")  # noqa: B904
     for key in connectivity:

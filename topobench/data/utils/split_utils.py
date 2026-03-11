@@ -351,9 +351,7 @@ def load_inductive_splits(dataset, parameters):
     n_train = len(split_idx["train"])
     n_valid = len(split_idx["valid"])
     n_test = len(split_idx["test"])
-    msg = (
-        f"[splits] dataset_size={n_total} | train={n_train} val={n_valid} test={n_test}"
-    )
+    msg = f"[splits] dataset_size={n_total} | train={n_train} val={n_valid} test={n_test}"
     log.info(msg)
     print(msg)
 
